@@ -3,8 +3,6 @@ import json
 import logging
 from typing import Any
 
-from pydantic.dataclasses import dataclass
-
 from models.address import Address
 
 
@@ -17,7 +15,6 @@ class RequestType(Enum):
     IDENTIFICATION = "identification"
 
 
-@dataclass
 class RequestHeader:
     type: RequestType = RequestType.EMPTY
     _from: str

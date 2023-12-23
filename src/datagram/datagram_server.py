@@ -1,20 +1,23 @@
 import socket
 import logging
 import json 
+import asyncio
 from io import StringIO
 
 
 class DatagramSocket:
     def __init__(self):
         self.__log = logging.getLogger("Filarmonic")
-        self.__server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.__server = None
+    
+    
+    async def run_server(self):
+        self.__server = await asyncio.to_thread(socket.socket, socket.AF_INET, socket.SOCK_DGRAM)
         self.__server.bind(("", 2222))
-        
-    def run_server(self):
-        print("run server")
+        self.__log.info("run datagram server")
         while True:
-            msg = self.__server.recvfrom(200)
-            self.__log.info(f"Received Datagram msg successful : {msg}")
+            data, addr = await asyncio.to_thread(self.__server.recvfrom, 200)
+            self.__log.info(f"Received Datagram msg successful : {(data, addr)}")
             
             response = {
                 "server" : True,
@@ -22,4 +25,4 @@ class DatagramSocket:
                 "ip" : socket.gethostname(),
             }
             
-            self.__server.sendto(json.dumps(response).encode(), (msg[1][0], 2223))
+            self.__server.sendto(json.dumps(response).encode(), (addr[0], 2223))
