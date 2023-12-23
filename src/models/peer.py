@@ -8,7 +8,9 @@ from models.address import Address
 class PeerType(Enum):
     MONITOR = "monitor"
     CONTROLLER = "controller"
-    DEVICE = " device"
+    DEVICE = "device"
+    SPECTACLE = "spectacle"
+    KOPPELIA = "koppelia"
     NONE = "none"
 
 class ConnectionState(Enum):
@@ -22,3 +24,9 @@ class Peer:
     connection : WebSocketServerProtocol
     state : ConnectionState
     address : Address
+    def set_type_from_string(self, str_type : str):
+        if str_type in PeerType._value2member_map_.keys():
+            self.type = PeerType._value2member_map_[str_type]
+        else: 
+            type = PeerType.NONE
+
