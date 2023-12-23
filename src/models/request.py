@@ -5,7 +5,7 @@ from typing import Any
 
 from pydantic.dataclasses import dataclass
 
-from models.macaddress import MacAddress
+from models.address import Address
 
 
 class RequestType(Enum):
@@ -22,8 +22,8 @@ class RequestHeader:
     type: RequestType = RequestType.EMPTY
     _from: str
     to: str
-    from_addr: MacAddress
-    to_addr: MacAddress
+    from_addr: Address
+    to_addr: Address
 
 
 class Request:
@@ -57,7 +57,13 @@ class Request:
         self.__data[key] = value
 
     def from_json(self, raw_json : str):
-        json_obj : dict = json.loads(raw_json)
+        try:
+            json_obj : dict = json.loads(raw_json)
+        except Exception as e:
+            self.__log.error("Invalid socket frame : JSON parse failed")
+            self.__log.error(f"Request tried to parse : {raw_json}")
+            return
+        
         keys = json_obj.keys()
         if("data" in keys):
             self.__data = json_obj["data"]
@@ -78,9 +84,9 @@ class Request:
             if("to" in hkeys):
                 self.__header.to = header["to"]
             if("from_addr" in hkeys):
-                self.__header.from_addr = MacAddress(header["from_addr"])
+                self.__header.from_addr = Address(header["from_addr"])
             if("to_addr" in hkeys):
-                self.__header.to_addr = MacAddress(header["to_addr"])
+                self.__header.to_addr = Address(header["to_addr"])
 
     def to_object(self):
         obj = {
