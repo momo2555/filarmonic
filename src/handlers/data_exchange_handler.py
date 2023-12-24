@@ -13,7 +13,7 @@ class DataExchangeHandler(HandlerBase):
     def can_handle(self, request: Request) -> bool:
         return super().can_handle(request)
     
-    def handle(self, request: Request, connection : WebSocketServerProtocol) -> None:
+    async def handle(self, request: Request, connection : WebSocketServerProtocol) -> None:
         self._log.info("Handle Data Exchange request")
         self.__peer_table.send_to_all(request, [request.get_header_el("to")])
     

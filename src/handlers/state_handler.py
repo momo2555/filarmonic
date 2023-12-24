@@ -16,10 +16,10 @@ class StateHandler(HandlerBase):
         is_change_state = request.get_request_action() == "changeState"
         return is_request and is_change_state
     
-    def handle(self, request: Request, connection : WebSocketServerProtocol) -> None:
+    async def handle(self, request: Request, connection : WebSocketServerProtocol) -> None:
         self._log.info("Handle State request")
         new_state = request.get_request_param("state")
-        self.__state.update_state(new_state)
+        await self.__state.update_state(new_state)
 
 
     

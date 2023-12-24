@@ -12,5 +12,5 @@ class HandlerBase:
     def can_handle(self, request : Request) -> bool:
         return False
     
-    def handle(self, request : Request, connection : WebSocketServerProtocol) -> None:
+    async def handle(self, request : Request, connection : WebSocketServerProtocol) -> None:
         return None

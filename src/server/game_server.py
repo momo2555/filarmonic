@@ -33,7 +33,7 @@ class GameServer:
             received_request : Request = Request()
             self.__log.info(f"Received new message : {message}")
             received_request.from_json(message)
-            self.__handler_manager.run_handler(received_request, websocket)
+            await self.__handler_manager.run_handler(received_request, websocket)
 
     async def __entrypoint(self):
         self.__log.info("run game server")

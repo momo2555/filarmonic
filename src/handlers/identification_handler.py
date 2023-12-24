@@ -11,7 +11,7 @@ class IdentificationHandler(HandlerBase):
         HandlerBase.__init__(self)
         self.__peer_table : PeerTable = peer_table
 
-    def handle(self, request : Request, connection : WebSocketServerProtocol) -> None:
+    async def handle(self, request : Request, connection : WebSocketServerProtocol) -> None:
         self._log.info("Handle Identification request")
         new_peer : Peer = Peer()
         new_peer.connection = connection

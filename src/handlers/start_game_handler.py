@@ -11,5 +11,5 @@ class StartGameHandler(HandlerBase):
     def can_handle(self, request: Request) -> bool:
         return super().can_handle(request)
     
-    def handle(self, request: Request, connection : WebSocketServerProtocol) -> None:
+    async def handle(self, request: Request, connection : WebSocketServerProtocol) -> None:
         self._log.info("Handle Start Game request")

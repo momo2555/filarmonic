@@ -18,10 +18,10 @@ class RequestType(Enum):
 
 class RequestHeader:
     type: RequestType = RequestType.EMPTY
-    _from: PeerType
-    to: PeerType
-    from_addr: Address
-    to_addr: Address
+    _from: PeerType = PeerType.NONE
+    to: PeerType = PeerType.NONE
+    from_addr: Address = Address("")
+    to_addr: Address = Address("")
 
 
 class DirectRequest:
@@ -120,8 +120,8 @@ class Request:
                 "type" : self.__header.type.value,
                 "from" : self.__header._from.value,
                 "to" : self.__header.to.value,
-                "to_addr" : self.__header.to_addr,
-                "from_addr" : self.__header.from_addr,
+                "to_addr" : self.__header.to_addr.to_string(),
+                "from_addr" : self.__header.from_addr.to_string(),
             }
         }
         if (self.__header.type == RequestType.DATA_EXCHANGE \
@@ -131,5 +131,8 @@ class Request:
         elif (self.__header.type == RequestType.DEVICE_EVENT):
             obj["event"] = self.__event
         elif (self.__header.type == RequestType.REQUEST):
-            obj["params"] = self.__params
+            obj["request"] = {
+                "exec" : self.__request.exec,
+                "params" : self.__request.params
+            }
         return obj

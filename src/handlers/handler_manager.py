@@ -13,7 +13,7 @@ class HandlerManager:
     def add_handler(self, new_handler : HandlerBase):
         self.__handlers.append(new_handler)
     
-    def run_handler(self, request: Request, connection : WebSocketServerProtocol):
+    async def run_handler(self, request: Request, connection : WebSocketServerProtocol):
         for handler in self.__handlers:
             if handler.can_handle(request):
-                handler.handle(request, connection)
+                await handler.handle(request, connection)
