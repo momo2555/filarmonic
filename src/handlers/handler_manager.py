@@ -16,4 +16,4 @@ class HandlerManager:
     def run_handler(self, request: Request, connection : WebSocketServerProtocol):
         for handler in self.__handlers:
             if handler.can_handle(request):
-                handler.handle(request)
+                handler.handle(request, connection)

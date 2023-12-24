@@ -1,6 +1,6 @@
 from websockets.server import WebSocketServerProtocol
 
-from handlerbase import HandlerBase
+from handlers.handlerbase import HandlerBase
 from server.peertable import PeerTable
 from models.peer import Peer, PeerType
 from models.request import Request, RequestType
@@ -15,8 +15,8 @@ class IdentificationHandler(HandlerBase):
         self._log.info("Handle Identification request")
         new_peer : Peer = Peer()
         new_peer.connection = connection
-        new_peer.set_type_from_string(request.get_header_el("from"))
-        self.__peer_table.add_peer()
+        new_peer.type = request.get_header_el("from")
+        self.__peer_table.add_peer(new_peer)
 
 
     def can_handle(self, request : Request) -> bool:

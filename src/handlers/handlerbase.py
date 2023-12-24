@@ -9,8 +9,8 @@ class HandlerBase:
     def __init__(self):
         self._log = logging.getLogger("Filarmonic")
 
-    def can_handle(self, request : Request, connection : WebSocketServerProtocol) -> bool:
+    def can_handle(self, request : Request) -> bool:
         return False
     
-    def handle(self, request : Request) -> None:
+    def handle(self, request : Request, connection : WebSocketServerProtocol) -> None:
         return None

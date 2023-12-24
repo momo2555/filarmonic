@@ -4,6 +4,7 @@ import logging
 from typing import Any
 
 from models.address import Address
+from models.peer import PeerType
 
 
 class RequestType(Enum):
@@ -17,14 +18,14 @@ class RequestType(Enum):
 
 class RequestHeader:
     type: RequestType = RequestType.EMPTY
-    _from: str
-    to: str
+    _from: PeerType
+    to: PeerType
     from_addr: Address
     to_addr: Address
 
 
 class DirectRequest:
-    exec: str
+    exec: str = ""
     params : dict = {}
 
 
@@ -54,6 +55,12 @@ class Request:
 
     def set_request_action(self, name : str):
         self.__request.exec = name
+    
+    def get_request_action(self) -> str:
+        return self.__request.exec
+    
+    def get_request_param(self, key) -> Any:
+        return self.__request.params[key]
 
     def create_param(self, param, value):
         self.__request.params[param] = value
@@ -89,10 +96,19 @@ class Request:
                     self.__header.type = RequestType._value2member_map_[header["type"]]
                 except:
                     self.__log.error(f"Cannot convert header type '{header['type']}', it's not a valid request type.")
+
             if("from" in hkeys):
-                self.__header._from = header["from"]
+                try:
+                    self.__header._from = PeerType._value2member_map_[header["from"]]
+                except:
+                    self.__log.error(f"Cannot convert header from '{header['from']}', it's not a valid from value.")
+
             if("to" in hkeys):
-                self.__header.to = header["to"]
+                try:
+                    self.__header.to = PeerType._value2member_map_[header["to"]]
+                except:
+                    self.__log.error(f"Cannot convert header from '{header['to']}', it's not a valid from value.")
+
             if("from_addr" in hkeys):
                 self.__header.from_addr = Address(header["from_addr"])
             if("to_addr" in hkeys):
@@ -102,8 +118,8 @@ class Request:
         obj = {
             "header" : {
                 "type" : self.__header.type.value,
-                "from" : self.__header._from,
-                "to" : self.__header.to,
+                "from" : self.__header._from.value,
+                "to" : self.__header.to.value,
                 "to_addr" : self.__header.to_addr,
                 "from_addr" : self.__header.from_addr,
             }
