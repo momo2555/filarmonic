@@ -9,9 +9,10 @@ class State():
         self.__peer_table : PeerTable = peer_table
     
     async def update_state(self, new_state : dict, spread : bool = True):
+        self.__game_state = new_state
         state_request = Request()
         state_request.set_type(RequestType.REQUEST)
         state_request.set_request_action("changeState")
         state_request.create_param("state", self.__game_state)
-        
-        await self.__peer_table.send_to_all(state_request, [PeerType.MONITOR, PeerType.CONTROLLER])
+        if spread:
+            await self.__peer_table.send_to_all(state_request, [PeerType.MONITOR, PeerType.CONTROLLER])
