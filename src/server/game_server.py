@@ -7,6 +7,7 @@ from handlers.handler_manager import HandlerManager
 from handlers.data_exchange_handler import DataExchangeHandler
 from handlers.identification_handler import IdentificationHandler
 from handlers.state_handler import StateHandler
+from handlers.start_game_handler import StartGameHandler
 from models.request import Request
 from server.peertable import PeerTable
 from server.state import State
@@ -23,10 +24,12 @@ class GameServer:
     def __init_handlers(self):
         data_exchange_handler = DataExchangeHandler(self.__peer_table)
         Identification_handler = IdentificationHandler(self.__peer_table)
-        State_handler = StateHandler(self.__state)
+        state_handler = StateHandler(self.__state)
+        start_game_handler = StartGameHandler(self.__peer_table)
         self.__handler_manager.add_handler(data_exchange_handler)
         self.__handler_manager.add_handler(Identification_handler)
-        self.__handler_manager.add_handler(State_handler)
+        self.__handler_manager.add_handler(state_handler)
+        self.__handler_manager.add_handler(start_game_handler)
 
     async def __receive_socket_handler(self, websocket : WebSocketServerProtocol):
         async for message in websocket:
