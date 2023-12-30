@@ -3,7 +3,9 @@ from websockets.server import WebSocketServerProtocol
 from handlers.handlerbase import HandlerBase
 from models.request import Request, RequestType
 from models.peer import PeerType
+from models.game import Game
 from server.peertable import PeerTable
+from services.downloader import Downloader
 
 
 class StartGameHandler(HandlerBase):
@@ -24,4 +26,7 @@ class StartGameHandler(HandlerBase):
         # 3 - launch the game
         # 4 - start the game (send a start request to spectacle and koppeliaApp) 
         #send the request back to spectacle
+        game = Game(request.get_request_param("gameId"))
+        game.set_url(request.get_request_param("gameUrl"))
+        
         await self.peer_table.send_to_all(request, [PeerType.SPECTACLE])
