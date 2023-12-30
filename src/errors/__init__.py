@@ -1,0 +1,3 @@
+class KoppeliaRepertoryNotExist(Exception):
+    pass
+
