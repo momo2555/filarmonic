@@ -28,5 +28,7 @@ class StartGameHandler(HandlerBase):
         #send the request back to spectacle
         game = Game(request.get_request_param("gameId"))
         game.set_url(request.get_request_param("gameUrl"))
-        
+        if not game.is_downloaded():
+            downlader = Downloader()
+            await downlader.download_game(game)
         await self.peer_table.send_to_all(request, [PeerType.SPECTACLE])

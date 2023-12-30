@@ -27,4 +27,6 @@ class FileUtils:
     @staticmethod
     def get_game_folder() -> Path:
         p = FileUtils.get_koppelia_folder() / Path("games")
+        if not p.exists():
+            os.mkdir(p)
         return p

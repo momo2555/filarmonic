@@ -11,7 +11,7 @@ class GameUtils:
     
     @staticmethod
     def is_game_downloaded(game_id : str) -> bool:
-        p : Path = GameUtils.get_path_by_game_id()
+        p : Path = GameUtils.get_path_by_game_id(game_id)
         return p.exists()
     
     
