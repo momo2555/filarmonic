@@ -1,3 +1,5 @@
+import asyncio
+
 from websockets.server import WebSocketServerProtocol
 
 from handlers.handlerbase import HandlerBase
@@ -30,5 +32,5 @@ class StartGameHandler(HandlerBase):
         game.set_url(request.get_request_param("gameUrl"))
         if not game.is_downloaded():
             downlader = Downloader()
-            await downlader.download_game(game)
+            asyncio.create_task(downlader.download_game(game))
         await self.peer_table.send_to_all(request, [PeerType.SPECTACLE])
