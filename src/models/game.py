@@ -8,9 +8,12 @@ class Game:
         self.__id = id
         self.__name = ""
         self.__url = ""
+        self.update()
+    
+    def update(self):
         self.__path = GameUtils.get_path_by_game_id(self.__id)
         self.__downloaded = GameUtils.is_game_downloaded(self.__id)
-    
+
     def get_path(self) -> Path:
         return self.__path
     
