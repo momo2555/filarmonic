@@ -7,8 +7,9 @@ from models.request import Request, RequestType
 from models.peer import PeerType
 from models.game import Game
 from server.peertable import PeerTable
-from services.downloader import Downloader
-from services.gamerunner import GameRunner
+from process import process_manager
+from process.start_game import StartGameProcess
+
 
 
 class StartGameHandler(HandlerBase):
@@ -32,14 +33,8 @@ class StartGameHandler(HandlerBase):
         game = Game(request.get_request_param("gameId"))
         game.set_url(request.get_request_param("gameUrl"))
         await self.peer_table.send_to_all(request, [PeerType.SPECTACLE])
-        asyncio.create_task(self.run_game_task(game))
-        
+        # start a game
+        start_game_process = StartGameProcess(game)
+        await process_manager.create_process(start_game_process)
 
-    async def run_game_task(self, game: Game):
-        if not game.is_downloaded():
-            downlader = Downloader()
-            await downlader.download_game(game)
-        if game.is_downloaded():
-            game_runner = GameRunner()
-            await game_runner.run_game(game)
-        self._log.info("Game end")
+       

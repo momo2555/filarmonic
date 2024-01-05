@@ -4,6 +4,7 @@ from handlers.handlerbase import HandlerBase
 from models.request import Request, RequestType
 from models.peer import PeerType
 from server.peertable import PeerTable
+from process import process_manager
 
 
 class CloseGameHandler(HandlerBase):
@@ -25,3 +26,4 @@ class CloseGameHandler(HandlerBase):
         # 4 - start the game (send a start request to spectacle and koppeliaApp) 
         #send the request back to spectacle
         await self.peer_table.send_to_all(request, [PeerType.SPECTACLE])
+        await process_manager.stop_current_process()
