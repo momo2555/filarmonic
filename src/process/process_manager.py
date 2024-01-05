@@ -35,7 +35,7 @@ class ProcessManager:
                 self.__start_next_task()
             case "stopCurrentTask":
                 self.__process.cancel()
-                self.__start_next_task()
+                # self.__start_next_task()  =>  An stopTask message will be sent to call the next task
             case "endTask":
                 self.__start_next_task()
             case "stopTask":
